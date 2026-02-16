@@ -1,106 +1,171 @@
-# 🚀 Azure App Service Deployment & Scaling
+## 🚀 Azure App Service CI/CD + Staging + Autoscale Lab
 
-## 📌 Overview
-This project demonstrates deploying a web application on Azure App Service, implementing CI/CD with GitHub Actions, using deployment slots for safe releases, configuring autoscaling based on performance metrics, enabling backups for recovery, and monitoring application health with alerts.
+This project demonstrates a real-world Azure cloud deployment pipeline for a Python web application, focusing on production grade practices such as CI/CD, staged deployments, autoscaling, monitoring, alerting, and backup strategy.  
 
-
-
-## 🏗 Architecture Overview
-- Users access a web application hosted on Azure App Service  
-- CI/CD deploys code from GitHub to Azure  
-- Deployment slots enable safe staging → production swaps  
-- Autoscaling adjusts instances based on CPU load  
-- Backups provide disaster recovery  
-- Azure Monitor tracks performance and triggers alerts  
+The goal of this lab was to simulate how modern teams deploy, scale, monitor, and protect applications running on Azure App Service.
 
 
 
-## 🛠 Technologies Used
-- Azure App Service  
-- App Service Plan (Basic B1)  
-- Deployment Slots  
-- GitHub Actions (CI/CD)  
-- Azure Monitor  
-- Azure Alerts  
-- Azure Storage (Backups)  
+## 🧩 Architecture Overview
+
+**Core Components:**
+- Azure App Service (Linux) – Hosts the Python web app  
+- App Service Plan – Defines compute, scaling, and pricing tier  
+- GitHub Actions – CI/CD pipeline for build & deployment  
+- Deployment Slots – Staging environment for safe releases  
+- Azure Monitor – Metrics and alerts  
+- Azure Autoscale – CPU-based scaling rules  
+- Azure Backup – Automated backups to Storage Account  
+
+**Workflow:**
+1. Code pushed to GitHub  
+2. GitHub Actions builds the app  
+3. App is deployed to Azure App Service  
+4. Staging slot used for pre-production validation  
+5. Slot swap promotes staging to production  
+6. Autoscale rules adjust capacity based on CPU load  
+7. Alerts trigger on performance degradation  
+8. Backups protect application state  
 
 
 
-## 1️⃣ Create an App Service
+## ✅ CI/CD: GitHub Actions Deployment
+
+Automated CI/CD pipeline builds and deploys the Python app to Azure App Service whenever code is pushed to `main`.
+
+![GitHub Actions - Successful Deployment](./screenshots/github-actions-successful-deployment.png)
+
+**What this demonstrates:**
+- Automated build & deployment  
+- No manual Azure portal uploads  
+- Real-world DevOps workflow  
 
 
 
-- Created an App Service with a Basic B1 App Service Plan (lowest tier that supports deployment slots).  
-- Selected runtime stack (Node.js/Python/.NET) and deployed to a new resource group.
+## ✅ Azure Deployment Center Verification
+
+Azure Deployment Center confirms successful deployment from GitHub Actions.
+
+![Deployment Center Logs](./screenshots/deployment-center-successful-deployment.png)
+
+**Why this matters:**
+- Confirms Azure received and activated the deployment  
+- Validates CI/CD integration with Azure App Service  
 
 
 
-## 2️⃣ Deploy the Web Application (CI/CD)
+## 🌍 Application Running in Production
+
+The application is publicly accessible via Azure App Service URL.
+
+![App Running in Browser](./screenshots/app-running-in-browser.png)
+
+**Outcome:**
+- Confirms the pipeline successfully deployed a working application  
+- Demonstrates real production hosting in Azure  
 
 
 
-- Connected GitHub repository via Deployment Center.  
-- Configured GitHub Actions for automated deployments.  
-- Verified successful deployment by accessing the App Service URL.
+## 🔁 Deployment Slots (Staging Environment)
+
+A staging slot was created to allow safe testing before production deployment.
+
+![Deployment Slots](./screenshots/deployments-slots-page.png)
+
+**Benefits of slots:**
+- Test new versions before going live  
+- Zero-downtime deployments  
+- Blue/Green deployment strategy  
 
 
 
-## 3️⃣ Set Up Deployment Slots (Staging → Production)
+## 🔄 Slot Swap via GitHub Actions
+
+GitHub Actions was configured to deploy to the **staging slot** and then swap to production.
+
+![GitHub Actions Swap](./screenshots/githubactions-successful-swap-operation.png)
+
+**Why this is important:**
+- Enables safer releases  
+- Prevents broken builds from reaching users  
+- Mirrors real enterprise deployment patterns  
 
 
 
-- Created a `staging` deployment slot.  
-- Deployed a new app version to staging.  
-- Tested the staging URL.  
-- Swapped staging to production for zero-downtime release.
+## 📈 Autoscaling (CPU-Based Rules)
+
+Azure Autoscale was configured to dynamically adjust instance count based on CPU usage.
+
+**Scale Out Rule (High CPU)**
+![Scale Out Rule](./screenshots/scale-out-metric.png)
+
+**Scale In Rule (Low CPU)**
+![Scale In Rule](./screenshots/scale-in-metric.png)
+
+**What this demonstrates:**
+- Automatic performance scaling  
+- Cost-efficiency during low traffic  
+- Resilience during traffic spikes  
 
 
 
-## 4️⃣ Configure Autoscaling
+## 🚨 Performance Alerting
+
+An alert rule was created to notify when average response time exceeds a threshold.
+
+![Alert Rule](./screenshots/alert-rule-created.png)
+
+**Why this matters:**
+- Proactive monitoring  
+- Detects performance degradation  
+- Enables faster incident response  
 
 
 
-- Enabled autoscaling on the App Service Plan.  
-- Configured scale-out rule: +1 instance if CPU > 70% for 10 minutes.  
-- Configured scale-in rule: -1 instance if CPU < 30% for 20 minutes.  
-- Set max instances = 2 to control costs.
+## 📊 Application Metrics & Observability
+
+Azure Monitor Metrics were used to track application performance.
+
+![Metrics Dashboard](./screenshots/metrics-dashboard.png)
+
+**Monitored metrics include:**
+- Response time  
+- CPU usage  
+- Request trends  
 
 
 
-## 5️⃣ Backup and Restore
+## 💾 Backup & Recovery Strategy
+
+Automated backups were configured to protect the application.
+
+**Backup Configuration**
+![Backup Config](./screenshots/backup-configuration.png)
+
+**Backup Created**
+![Backup Created](./screenshots/backup-created.png)
+
+**Why this matters:**
+- Disaster recovery readiness  
+- Protects against accidental deletion  
+- Supports rollback scenarios  
 
 
 
-- Configured backups to an Azure Storage account.  
-- Performed a manual backup of the App Service.  
-- (Optional) Validated restore to a new App Service for recovery testing.
+## 🧠 Skills Demonstrated
+
+- Azure App Service (Linux)  
+- GitHub Actions CI/CD  
+- Deployment Slots (Staging → Production)  
+- Blue-Green Deployments  
+- Autoscaling (CPU metrics)  
+- Azure Monitor & Alerts  
+- Backup & Restore Strategy  
+- Cloud Cost Management  
+- Production-Ready Cloud Architecture  
 
 
 
-## 6️⃣ Monitor and Configure Alerts
+## 🎯 Key Takeaways
 
-
-
-- Monitored CPU, requests, and response time using Azure Monitor metrics.  
-- Created an alert to notify when CPU usage exceeds 70%.
-
-
-
-## 🔐 What This Project Demonstrates
-
-### What I Built
-- Production-ready Azure App Service deployment  
-- CI/CD pipeline using GitHub Actions  
-- Blue/Green deployments using deployment slots  
-- Autoscaling based on performance metrics  
-- Backup and recovery configuration  
-- Monitoring and alerting for application health  
-
-### Skills Demonstrated
-- Azure App Service management  
-- CI/CD pipelines (GitHub Actions)  
-- Deployment strategies (staging → production)  
-- Autoscaling & performance tuning  
-- Backup & disaster recovery  
-- Monitoring & alerting  
-- AZ-104 application hosting best practices  
+This project simulates how modern cloud-native applications are deployed and operated in production environments. It demonstrates not just deployment, but also **reliability, scalability, monitoring, alerting, and recovery**, aligning with real-world DevOps and Cloud Engineer responsibilities.
